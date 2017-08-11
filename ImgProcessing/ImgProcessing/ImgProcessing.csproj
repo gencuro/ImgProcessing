@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Callbacks\GrayscaleOperation.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="IDataBinder.cs" />
     <Compile Include="ImgProcessor.cs" />
     <Compile Include="IOperation.cs" />

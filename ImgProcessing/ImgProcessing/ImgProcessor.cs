@@ -76,6 +76,17 @@ namespace ImgProcessing
             return m_img.Clone(rect, m_img.PixelFormat);
         }
 
+        public System.Drawing.Imaging.BitmapData BindLockBits(Rectangle rect)
+        {
+            //return m_img.LockBits(new Rectangle(rect.X, rect.Y, 1, 1), System.Drawing.Imaging.ImageLockMode.ReadWrite, m_img.PixelFormat);
+            return m_img.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite, m_img.PixelFormat);
+        }
+
+        public void BindUnlockBits(System.Drawing.Imaging.BitmapData data)
+        {
+            m_img.UnlockBits(data);
+        }
+
         public void Dispose()
         {
             Dispose(true);
@@ -118,36 +129,10 @@ namespace ImgProcessing
         private IEnumerable<ProcessingPart> SplitImage(Size img, Size processing)
         {
             int i = 0;
-            foreach (var rect in SplitToRectangle(img, processing))
+            foreach (var rect in Helper.SplitToRectangle(img, processing))
             {
                 yield return new ProcessingPart(i, rect, this);
                 i++;
-            }
-        }
-
-        private IEnumerable<Rectangle> SplitToRectangle(Size img, Size processing)
-        {
-            int xIdx = 0;
-            int x = 0;
-
-            while (x < img.Width)
-            {
-                int y = 0;
-                int yIdy = 0;
-
-                while (y < img.Height)
-                {
-                    int height = (y + processing.Height < img.Height) ? processing.Height : (img.Height - y);
-                    yield return new Rectangle(x, y, processing.Width, height);
-                    y += height;
-                    yIdy++;
-                }
-
-                y = 0;
-
-                int width = (x + processing.Width < img.Width) ? processing.Width : (img.Width - x);
-                x += width;
-                xIdx++;
             }
         }
     }

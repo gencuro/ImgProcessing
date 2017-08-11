@@ -10,6 +10,7 @@ namespace ImgProcessing
     public interface IDataBinder
     {
         Image BindCoordinateWithImage(Rectangle rect);
-        //IEnumerable<BitmapD>
+        System.Drawing.Imaging.BitmapData BindLockBits(Rectangle rect);
+        void BindUnlockBits(System.Drawing.Imaging.BitmapData data);
     }
 }

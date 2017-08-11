@@ -33,5 +33,15 @@ namespace ImgProcessing
         {
             m_binder.BindCoordinateWithImage(Bounds).Save(path);
         }
+
+        public BitmapData GetBitmapData()
+        {
+            return m_binder.BindLockBits(Bounds);
+        }
+
+        public void UnlockBits(BitmapData data)
+        {
+            m_binder.BindUnlockBits(data);
+        }
     }
 }
