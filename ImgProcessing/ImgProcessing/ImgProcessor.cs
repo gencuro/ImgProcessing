@@ -6,7 +6,7 @@ using System.IO;
 
 namespace ImgProcessing
 {
-    public class ImgProcessor : IDisposable
+    public class ImgProcessor : IDataBinder, IDisposable
     {
         private FileStream m_fs;
         private Bitmap m_img;
@@ -75,6 +75,11 @@ namespace ImgProcessing
             }
         }
 
+        public Image BindCoordinateWithImage(Rectangle rect)
+        {
+            return m_img.Clone(rect, m_img.PixelFormat);
+        }
+
         public void Dispose()
         {
             Dispose(true);
@@ -126,7 +131,7 @@ namespace ImgProcessing
                 while (y < img.Height)
                 {
                     int height = (y + processing.Height < img.Height) ? processing.Height : (img.Height - y);
-                    m_parts.Add(new ProcessingPart(xIdx, yIdy, x, y, processing.Width, height));
+                    m_parts.Add(new ProcessingPart(xIdx, yIdy, x, y, processing.Width, height, this));
                     y += height;
                     yIdy++;
                 }

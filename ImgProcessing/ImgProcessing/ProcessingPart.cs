@@ -10,24 +10,30 @@ namespace ImgProcessing
 {
     public class ProcessingPart
     {
-        public ProcessingPart(int row, int column, int x, int y, int width, int height)
+        private IDataBinder m_binder;
+
+        public ProcessingPart(int row, int column, int x, int y, int width, int height, IDataBinder binder)
         {
+            if(binder == null)
+            {
+                throw new ArgumentNullException("binder");
+            }
+
             Row = row;
             Column = column;
             Bounds = new Rectangle(x, y, width, height);
             Size = new Size(width, height);
+            m_binder = binder;
         }
 
         public int Row { get; private set; }
         public int Column { get; private set; }
         public Rectangle Bounds { get; private set; }
         public Size Size { get; private set; }
-        public Bitmap InnerBitmap { get; set; }
-        //public BitmapData InnerData { get; set; }
 
         public void Save(string path)
         {
-            // Save to file.
+            m_binder.BindCoordinateWithImage(Bounds).Save(path);
         }
     }
 }
