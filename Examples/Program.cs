@@ -11,15 +11,17 @@ namespace Examples
     {
         static void Main(string[] args)
         {
+            string exeLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string exeDir = System.IO.Path.GetDirectoryName(exeLocation);
+            string imgPath = exeDir + @"\..\..\..\samples\\zeebraJpegLarge.tif";
 
-            int i = 5 % 2;
-
-            string imgPath = "E:\\GitHub\\ImgProcessing\\samples\\zeebraJpegLarge.tif";
             using (ImgProcessor ip = new ImgProcessor(imgPath))
             {
-                //var img = ip.Chunks[0, 0];
+                ImgProcessing.Callbacks.GrayscaleOperation gop = new ImgProcessing.Callbacks.GrayscaleOperation();
 
-                ip[19,29].Save(@"E:\q.tiff");
+                var sv = new ImgProcessing.Callbacks.SplitToFileOperation(@"E:\1");
+
+                ip.ProcessByOperations(new IOperation[] { sv });
             }
         }
     }

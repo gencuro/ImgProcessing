@@ -41,9 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageArray.cs" />
+    <Compile Include="Callbacks\GrayscaleOperation.cs" />
     <Compile Include="ImgProcessor.cs" />
+    <Compile Include="IOperation.cs" />
+    <Compile Include="IProcessingOperation.cs" />
+    <Compile Include="ProcessingPart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Callbacks\SplitToFileOperation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
