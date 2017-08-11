@@ -11,9 +11,7 @@ namespace ImgProcessing
         private FileStream m_fs;
         private Bitmap m_img;
         private Size m_processingSize;
-        private Size m_operateSize;
-
-        private List<ProcessingPart> m_parts = new List<ProcessingPart>();
+        private Size m_bufferSize;
 
 #region Constructor
         public ImgProcessor(string path)
@@ -26,7 +24,7 @@ namespace ImgProcessing
         {
         }
 
-        public ImgProcessor(string path, Size processingSize, Size bSize)
+        public ImgProcessor(string path, Size processingSize, Size bufferSize)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -42,14 +40,12 @@ namespace ImgProcessing
 
             m_processingSize = processingSize;
 
-            if ((bSize.Width > processingSize.Width) || (bSize.Height > processingSize.Height))
+            if ((bufferSize.Width > processingSize.Width) || (bufferSize.Height > processingSize.Height))
             {
                 throw new ArgumentException("Processing size could not be bigger then processing size.", "processingSize");
             }
 
-            this.m_operateSize = bSize;
-
-            SplitImage(m_img.Size, m_processingSize);
+            this.m_bufferSize = bufferSize;
         }
 #endregion
 
@@ -57,7 +53,7 @@ namespace ImgProcessing
         {
             foreach (var operation in operations)
             {
-                foreach (var part in m_parts)
+                foreach (var part in SplitImage(m_img.Size, m_processingSize))
                 {
                     operation.Execute(part);
                 }
@@ -66,7 +62,7 @@ namespace ImgProcessing
 
         public void ProcessByParts(IEnumerable<IOperation> operations)
         {
-            foreach (var part in m_parts)
+            foreach (var part in SplitImage(m_img.Size, m_processingSize))
             {
                 foreach (var operation in operations)
                 {
@@ -119,7 +115,7 @@ namespace ImgProcessing
             m_img = (Bitmap)Image.FromStream(m_fs);
         }
 
-        private void SplitImage(Size img, Size processing)
+        private IEnumerable<ProcessingPart> SplitImage(Size img, Size processing)
         {
             int xIdx = 0;
             int x = 0;
@@ -131,7 +127,7 @@ namespace ImgProcessing
                 while (y < img.Height)
                 {
                     int height = (y + processing.Height < img.Height) ? processing.Height : (img.Height - y);
-                    m_parts.Add(new ProcessingPart(xIdx, yIdy, x, y, processing.Width, height, this));
+                    yield return new ProcessingPart(xIdx, yIdy, x, y, processing.Width, height, this);
                     y += height;
                     yIdy++;
                 }
