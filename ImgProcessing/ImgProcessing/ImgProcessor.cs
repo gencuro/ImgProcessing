@@ -117,6 +117,16 @@ namespace ImgProcessing
 
         private IEnumerable<ProcessingPart> SplitImage(Size img, Size processing)
         {
+            int i = 0;
+            foreach (var rect in SplitToRectangle(img, processing))
+            {
+                yield return new ProcessingPart(i, rect, this);
+                i++;
+            }
+        }
+
+        private IEnumerable<Rectangle> SplitToRectangle(Size img, Size processing)
+        {
             int xIdx = 0;
             int x = 0;
 
@@ -124,10 +134,11 @@ namespace ImgProcessing
             {
                 int y = 0;
                 int yIdy = 0;
+
                 while (y < img.Height)
                 {
                     int height = (y + processing.Height < img.Height) ? processing.Height : (img.Height - y);
-                    yield return new ProcessingPart(xIdx, yIdy, x, y, processing.Width, height, this);
+                    yield return new Rectangle(x, y, processing.Width, height);
                     y += height;
                     yIdy++;
                 }

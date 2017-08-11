@@ -12,22 +12,20 @@ namespace ImgProcessing
     {
         private IDataBinder m_binder;
 
-        public ProcessingPart(int row, int column, int x, int y, int width, int height, IDataBinder binder)
+        public ProcessingPart(int index, Rectangle bounds, IDataBinder binder)
         {
             if(binder == null)
             {
                 throw new ArgumentNullException("binder");
             }
 
-            Row = row;
-            Column = column;
-            Bounds = new Rectangle(x, y, width, height);
-            Size = new Size(width, height);
+            Index = index;
+            Bounds = bounds;
+            Size = new Size(bounds.Width, bounds.Height);
             m_binder = binder;
         }
 
-        public int Row { get; private set; }
-        public int Column { get; private set; }
+        public int Index { get; private set; }
         public Rectangle Bounds { get; private set; }
         public Size Size { get; private set; }
 

@@ -21,7 +21,7 @@ namespace Examples
 
                 var sv = new ImgProcessing.Callbacks.SplitToFileOperation(@"E:\1");
 
-                ip.ProcessByOperations(new IOperation[] { sv });
+                //ip.ProcessByOperations(new IOperation[] { sv });
             }
         }
     }

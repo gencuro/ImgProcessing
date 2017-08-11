@@ -18,7 +18,7 @@ namespace ImgProcessing.Callbacks
 
         public void Execute(ProcessingPart part)
         {
-            string path = m_path + @"\" + part.Row.ToString() + part.Column.ToString() + @".jpeg";
+            string path = m_path + @"\" + part.Index.ToString() + @".jpeg";
             part.Save(path);
         }
     }
