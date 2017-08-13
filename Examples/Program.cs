@@ -15,14 +15,8 @@ namespace Examples
             string exeDir = System.IO.Path.GetDirectoryName(exeLocation);
             string imgPath = exeDir + @"\..\..\..\samples\\zeebraJpegLarge.tif";
 
-            //using (ImgProcessor ip = new ImgProcessor(imgPath))
             using (ImgProcessor ip = new ImgProcessor(imgPath, new System.Drawing.Size(7000, 2000)))
             {
-                // TODO : REMOVE
-                ip.ProcessByParts(new IOperation[] { new ImgProcessing.Callbacks.GrayscaleOperation() });
-
-
-
                 ProcessByOperationsExample(ip);
                 ProcessByPartsExample(ip);
             }
