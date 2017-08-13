@@ -34,14 +34,9 @@ namespace ImgProcessing
             m_binder.BindCoordinateWithImage(Bounds).Save(path);
         }
 
-        public BitmapData GetBitmapData()
+        public void ExecuteOperation(Action<byte[]> operation)
         {
-            return m_binder.BindLockBits(Bounds);
-        }
-
-        public void UnlockBits(BitmapData data)
-        {
-            m_binder.BindUnlockBits(data);
+            m_binder.ProcesOperationWithData(Bounds, operation);
         }
     }
 }

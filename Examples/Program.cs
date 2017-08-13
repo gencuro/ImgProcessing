@@ -18,15 +18,24 @@ namespace Examples
             //using (ImgProcessor ip = new ImgProcessor(imgPath))
             using (ImgProcessor ip = new ImgProcessor(imgPath, new System.Drawing.Size(7000, 2000)))
             {
-                ImgProcessing.Callbacks.GrayscaleOperation gop = new ImgProcessing.Callbacks.GrayscaleOperation();
+                // TODO : REMOVE
+                ip.ProcessByParts(new IOperation[] { new ImgProcessing.Callbacks.GrayscaleOperation() });
 
-                var sv = new ImgProcessing.Callbacks.SplitToFileOperation(@"E:\1");
 
-                //ip.ProcessByOperations(new IOperation[] { gop, sv });
 
-                ip.ProcessByParts(new IOperation[] { gop, sv });
-                
+                ProcessByOperationsExample(ip);
+                ProcessByPartsExample(ip);
             }
+        }
+
+        private static void ProcessByOperationsExample(ImgProcessor imgProc)
+        {
+            imgProc.ProcessByOperations(new IOperation[] { new ImgProcessing.Callbacks.GrayscaleOperation(), new ImgProcessing.Callbacks.SplitToFileOperation(@"E:\1") });
+        }
+
+        private static void ProcessByPartsExample(ImgProcessor imgProc)
+        {
+            imgProc.ProcessByParts(new IOperation[] { new ImgProcessing.Callbacks.GrayscaleOperation(), new ImgProcessing.Callbacks.SplitToFileOperation(@"E:\1") });
         }
     }
 }

@@ -49,6 +49,11 @@ namespace ImgProcessing
         }
 #endregion
 
+        public Size Size
+        {
+            get { return m_img.Size; }
+        }
+
         public void ProcessByOperations(IEnumerable<IOperation> operations)
         {
             foreach (var operation in operations)
@@ -71,20 +76,29 @@ namespace ImgProcessing
             }
         }
 
+        public void ProcesOperationWithData(Rectangle rect, Action<byte[]> operation)
+        {
+            foreach(var buffer in Helper.SplitToRectangle(rect.Size, m_bufferSize))
+            {
+                var data = m_img.LockBits(buffer, System.Drawing.Imaging.ImageLockMode.ReadWrite, m_img.PixelFormat);
+                IntPtr ptr = data.Scan0;
+
+                int bytes = Math.Abs(data.Stride) * buffer.Size.Height;
+                byte[] rgbValues = new byte[bytes];
+
+                System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+
+                operation(rgbValues);
+
+                System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
+
+                m_img.UnlockBits(data);
+            }
+        }
+
         public Image BindCoordinateWithImage(Rectangle rect)
         {
             return m_img.Clone(rect, m_img.PixelFormat);
-        }
-
-        public System.Drawing.Imaging.BitmapData BindLockBits(Rectangle rect)
-        {
-            //return m_img.LockBits(new Rectangle(rect.X, rect.Y, 1, 1), System.Drawing.Imaging.ImageLockMode.ReadWrite, m_img.PixelFormat);
-            return m_img.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite, m_img.PixelFormat);
-        }
-
-        public void BindUnlockBits(System.Drawing.Imaging.BitmapData data)
-        {
-            m_img.UnlockBits(data);
         }
 
         public void Dispose()
