@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 
 
@@ -80,10 +81,10 @@ namespace ImgProcessing
         {
             foreach(var buffer in Helper.SplitToRectangle(rect.Size, m_bufferSize))
             {
-                var data = m_img.LockBits(buffer, System.Drawing.Imaging.ImageLockMode.ReadWrite, m_img.PixelFormat);
+                var data = m_img.LockBits(new Rectangle(buffer.X + rect.X, buffer.Y + rect.Y, buffer.Width, buffer.Height), ImageLockMode.WriteOnly, m_img.PixelFormat);
                 IntPtr ptr = data.Scan0;
 
-                int bytes = Math.Abs(data.Stride) * buffer.Size.Height;
+                int bytes = Math.Abs(data.Stride) * (buffer.Height - 1);
                 byte[] rgbValues = new byte[bytes];
 
                 System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);

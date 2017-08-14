@@ -12,17 +12,16 @@ namespace ImgProcessing
             while (x < img.Width)
             {
                 int y = 0;
+                int width = (x + part.Width < img.Width) ? part.Width : (img.Width - x);
 
                 while (y < img.Height)
                 {
                     int height = (y + part.Height < img.Height) ? part.Height : (img.Height - y);
-                    yield return new Rectangle(x, y, part.Width, height);
+                    yield return new Rectangle(x, y, width, height);
                     y += height;
                 }
 
                 y = 0;
-
-                int width = (x + part.Width < img.Width) ? part.Width : (img.Width - x);
                 x += width;
             }
         }
