@@ -31,7 +31,14 @@ namespace ImgProcessing
 
         public void Save(string path)
         {
-            m_binder.BindCoordinateWithImage(Bounds).Save(path);
+            using(var img = m_binder.BindCoordinateWithImage(Bounds))
+            {
+                // img?.Save(path);  -- for VS2015, but unfortunately I have only VS2013.
+                if(img != null)
+                {
+                    img.Save(path);
+                }
+            }
         }
 
         public void ExecuteOperation(Action<byte[]> operation)
